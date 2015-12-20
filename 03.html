@@ -5,12 +5,10 @@
 </head>
 <style>
 	
-	.container{width:600px; padding:20px; margin:20px auto; }
-	.row {
-		margin:10px 0;
-	}
+	.container{width:900px; padding:20px; margin:20px auto; }
+	.row {	margin:10px 0; }
 	.row img{width:100%;}
-	.img-wrap{padding:10px; background:#313140;margin:15px 0; color:#fff;text-align:center}
+	.img-wrap{width:200px; float:left;padding:10px; background:#313140;margin:15px 0; color:#fff;text-align:center}
 	.block {
 		position: absolute;
 		background-color: #abc;
@@ -40,10 +38,12 @@
 	<img src="images/2.jpg" alt="image 2" title="02 image" />
 	<img src="images/3.jpg" alt="image 3" title="03 image" />
 	<img src="images/4.jpg" alt="image 4" title="04 image" />
+		
 </div>
 </div>
 
 <script src="js/jquery-2.1.4.min.js" ></script>
+<script src="js/velocity.js" ></script>
 <script src="js/jquery.autoImageCaption.js" ></script>
 <script>
 
@@ -58,10 +58,10 @@
 		$('#start').click(function(){
 			var anim = $('.animateto'),
 				width1 = anim.outerWidth(),
-				height1 = anim.outerHeight(),
+				height1 = anim.outerHeight(false),
 				positon = anim.position()
 			;
-			$('.block').animate({opacity: 0.2,left:positon.left,top:positon.top, width:width1, height:height1}, 500);          
+			$('.block').velocity({opacity: 0.2,left:positon.left,top:positon.top, width:width1, height:height1}, 500);          
 		});
 		
 		$('#start2').click(function(){
@@ -71,28 +71,31 @@
 				positon = anim.position()
 			;
 			
-			var delay=0
+			var delay=0;
 			
 			$.each($('.animateto'), function( index, element ) {
 			// $('.animateto').each(function(index,element){
 				var curr = $(element),
-					curr_width = curr.outerWidth(),
-					curr_height = curr.outerHeight(),
+					curr_width = (curr.innerWidth(false)),
+					curr_height = (curr.innerHeight(false)),
 					curr_positon = curr.position()
 				;
 				
-				var newElement=$(element).clone();
+				
+				
+				var newElement = $(element).clone();
+				
 				$(".row").prepend(newElement); //add the element 
 				newElement.css({'position':'absolute','left':curr_positon.left,'top':curr_positon.top,width:curr_width, height:curr_height});
 				//Now animate
-				newElement.delay(delay).animate({opacity: 0,left:positon.left,top:positon.top, width:width1, height:height1}, 500);   
-				 delay += 500;
+				newElement.delay(delay).velocity({
+					opacity: 0,left:positon.left,top:positon.top, width:width1, height:height1}, 500,'easeInCubic',function(){ $(newElement).remove() });   
+					
+					
+				delay += 500;
+				
 			});
 			
-	
-			/* $('.animateto')
-			.css({'position':'absolute','left':curr_positon.left,'top':curr_positon.top,width:curr_width, height:curr_height})
-			.animate({opacity: 0.2,left:positon.left,top:positon.top, width:width1, height:height1}, 500);           */
 		});
 		
 		
